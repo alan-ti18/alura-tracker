@@ -29,7 +29,7 @@
         methods: {
             finalizarTarefa (tempoDecorrido: number) : void {
                 this.$emit('aoSalvarTarefa', {
-                    duracaoEmSegudos: tempoDecorrido,
+                    duracaoEmSegundos: tempoDecorrido,
                     descricao: this.descricao
                 })
                 this.descricao = '';

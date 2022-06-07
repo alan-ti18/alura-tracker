@@ -7,6 +7,9 @@
       <CFormulario @aoSalvarTarefa="salvarTarefa"/>
       <div class="lista">
         <CTarefa v-for="(tarefa, index) in tarefas" :key="index" :tarefa="tarefa" />
+        <CBox v-if="listaEstaVazia">
+          Você não está muito produtivo hoje!
+        </CBox>
       </div>
     </div>
   </main>
@@ -17,6 +20,7 @@ import { defineComponent } from 'vue';
 import CBarraLateral from './components/CBarraLateral.vue';
 import CFormulario from './components/CFormulario.vue';
 import CTarefa from './components/CTarefa.vue';
+import CBox from './components/CBox.vue';
 import ITarefa from './interfaces/ITarefa';
 
 export default defineComponent({
@@ -24,11 +28,17 @@ export default defineComponent({
   components: {
     CBarraLateral,
     CFormulario,
-    CTarefa
+    CTarefa,
+    CBox
   },
   data(){
     return {
       tarefas: [] as ITarefa[]
+    }
+  },
+  computed: {
+    listaEstaVazia () : boolean {
+      return this.tarefas.length === 0;
     }
   },
   methods: {
