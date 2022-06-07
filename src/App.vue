@@ -1,28 +1,46 @@
 <template>
   <main class="columns is-gapless is-multiline">
     <div class="column is-one-quarter">
-      <BarraLateral />
+      <CBarraLateral />
     </div>
     <div class="column is-three-quarters">
-      <FormularioComp />
+      <CFormulario @aoSalvarTarefa="salvarTarefa"/>
+      <div class="lista">
+        <CTarefa v-for="(tarefa, index) in tarefas" :key="index" :tarefa="tarefa" />
+      </div>
     </div>
   </main>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import BarraLateral from './components/BarraLateral.vue';
-import FormularioComp from './components/FormularioComp.vue';
+import CBarraLateral from './components/CBarraLateral.vue';
+import CFormulario from './components/CFormulario.vue';
+import CTarefa from './components/CTarefa.vue';
+import ITarefa from './interfaces/ITarefa';
 
 export default defineComponent({
   name: 'App',
   components: {
-    BarraLateral,
-    FormularioComp
+    CBarraLateral,
+    CFormulario,
+    CTarefa
+  },
+  data(){
+    return {
+      tarefas: [] as ITarefa[]
+    }
+  },
+  methods: {
+    salvarTarefa (tarefa: ITarefa) {
+      this.tarefas.push(tarefa)
+    }
   }
 });
 </script>
 
 <style>
-
+    .lista {
+        padding: 1.25rem;
+    }
 </style>
