@@ -13,7 +13,7 @@
           </router-link>
         </li>
         <li>
-          <router-link to="projetos" class="link">
+          <router-link to="/projetos" class="link">
             <i class="fas fa-project-diagram"></i>projetos
           </router-link>
         </li>
@@ -70,7 +70,8 @@ header {
 }
 
 .panel li {
-  margin: 8px 0;
+  margin: 12px 8px;
+  text-align: left;
 }
 
 .link {
@@ -83,6 +84,10 @@ header {
 
 .link.router-link-active {
   color: #FAF0CA;
+}
+
+.link i {
+  margin-right: 8px;
 }
 
 @media only screen and (max-width: 768px) {

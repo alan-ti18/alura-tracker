@@ -7,17 +7,17 @@
       <div class="column is-3">
         <div class="select">
           <select v-model="idProjeto">
-            <option value=""> Selecione o projeto</option>
+            <option> Selecione o projeto</option>
             <option
-              :value="projeto.id"
               v-for="projeto in projetos"
+              :value="projeto.id"
               :key="projeto.id"> {{projeto.nome}}
             </option>
           </select>
         </div>
       </div>
       <div class="column">
-        <TemporizadorTracker @aoFinalizarTarefa="salvarTarefa" />
+        <TemporizadorTracker @aoTemporizadorFinalizado="salvarTarefa" />
       </div>
     </div>
   </div>
@@ -40,15 +40,13 @@ export default defineComponent({
       idProjeto: ""
     }
   },
-  // emits: [
-  //   'aoSalvarTarefa'
-  // ],
+  emits: ['aoSalvarTarefa'],
   methods: {
-    salvarTarefa(tempoDecorrido: number): void {
+    salvarTarefa(tempoEmSegundos: number): void {
       this.$emit('aoSalvarTarefa', {
-        duracaoEmSegundos: tempoDecorrido,
+        duracaoEmSegundos: tempoEmSegundos,
         descricao: this.descricao,
-        projeto: this.projetos.find(proj => proj.id == this.idProjeto)
+        projeto: this.projetos.find(projeto => projeto.id == this.idProjeto)
       })
       this.descricao = ''
     }
