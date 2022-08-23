@@ -2,7 +2,7 @@
   <BoxCard>
     <div class="columns">
       <div class="column is-6 desc">{{ descricaoFormatada || 'Tarefa sem Descrição' }}</div>
-      <div class="column is-4 desc">[{{tarefa.projeto.nome}}]</div>
+      <div class="column is-4 desc">[{{ tarefa.projeto?.nome ||  'N/D' }}]</div>
       <div class="column crono-wrapper">
         <CronometroTracker :tempoEmSegundos="tarefa.duracaoEmSegundos">
         <ClockTimeEightOutlineIcon :size="16" style="margin-right: 8px;"/>

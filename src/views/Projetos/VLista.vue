@@ -24,7 +24,10 @@
                 <i class="fas fa-pencil-alt"></i>
               </span>
             </router-link>
-            <button class="button ml-2 is-danger" @click="excluirProjeto(projeto.id)">
+            <button
+              class="button ml-2 is-danger"
+              @click="excluirProjeto(projeto.id)"
+            >
               <span class="icon is-small">
                 <i class="fas fa-trash"></i>
               </span>
@@ -39,23 +42,44 @@
 <script lang="ts">
 import { computed, defineComponent } from "vue";
 import { useStore } from "@/store";
+import useNotificador from "@/hooks/notificador";
+import { TipoNotificacao } from "@/interfaces/INotificacao";
+import { OBTER_PROJETOS, REMOVER_PROJETO } from "@/store/tipo-acoes";
 
 export default defineComponent({
   name: "VLista",
   setup() {
     const store = useStore();
+    const { notificar } = useNotificador();
+    store.dispatch(OBTER_PROJETOS);
     return {
       projetos: computed(() => store.state.projetos),
-      store
+      store,
+      notificar,
     };
   },
   methods: {
     excluirProjeto(id: string) {
-      this.store.commit('EXCLUI_PROJETO', id)
-    }
-  }
+      // const projetoAlvo = this.projetos.find((proj) => {proj.id == id}) || {id: '', nome: 'sss'};
+      this.store
+        .dispatch(REMOVER_PROJETO, id)
+        .then(() => {
+          this.notificar(
+            TipoNotificacao.SUCESSO,
+            "Sucesso",
+            `O projeto foi excluído com sucesso.`
+          );
+        })
+        .catch(() => {
+          this.notificar(
+            TipoNotificacao.FALHA,
+            "Que pena",
+            "Houve algum problema ao excluir o projeto."
+          );
+        });
+    },
+  },
 });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
