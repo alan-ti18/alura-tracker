@@ -1,9 +1,13 @@
+import { INotificacao } from "@/interfaces/INotificacao";
 import IProjeto from "@/interfaces/IProjeto";
+// import ITarefa from "@/interfaces/ITarefa";
 import { InjectionKey } from "vue";
 import { createStore, Store, useStore as vuexUseStore } from "vuex";
 
 interface Estado {
   projetos: IProjeto[];
+  // tarefas: ITarefa[];
+  notificacoes: INotificacao[];
 }
 
 export const key: InjectionKey<Store<Estado>> = Symbol();
@@ -11,6 +15,8 @@ export const key: InjectionKey<Store<Estado>> = Symbol();
 export const store = createStore<Estado>({
   state: {
     projetos: [],
+    // tarefas: [],
+    notificacoes: [],
   },
   mutations: {
     ADICIONA_PROJETO(state, nomeDoProjeto: string) {
@@ -28,6 +34,36 @@ export const store = createStore<Estado>({
     ALTERA_PROJETO(state, projeto: IProjeto) {
       const index = state.projetos.findIndex((proj) => proj.id == projeto.id);
       state.projetos[index] = projeto;
+    },
+    EXCLUI_PROJETO(state, id) {
+      const index = state.projetos.findIndex((proj) => proj.id == id);
+      state.projetos.splice(index, 1);
+    },
+    // ADICIONA_TAREFA(state, tarefa: ITarefa) {
+    //   tarefa.id = new Date()
+    //     .toISOString()
+    //     .substring(0, 19)
+    //     .replaceAll("-", "")
+    //     .replaceAll(":", "")
+    //     .replaceAll("T", "");
+    //   state.tarefas.push(tarefa);
+    // },
+    // ALTERA_TAREFA(state, tarefa: ITarefa) {
+    //   const index = state.tarefas.findIndex((tar) => tar.id == tarefa.id);
+    //   state.tarefas[index] = tarefa;
+    // },
+    // EXCLUI_TAREFA(state, id: string) {
+    //   const index = state.tarefas.findIndex((tar) => tar.id == id);
+    //   state.tarefas.splice(index, 1);
+    // },
+    NOTIFICAR(state, novaNotificacao: INotificacao) {
+      novaNotificacao.id = new Date().getTime();
+      state.notificacoes.push(novaNotificacao);
+      setTimeout(() => {
+        state.notificacoes = state.notificacoes.filter(
+          (notif) => notif.id != novaNotificacao.id
+        );
+      }, 3000);
     },
   },
 });

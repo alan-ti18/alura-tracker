@@ -4,6 +4,7 @@
       <BarraLateral @aoMudarModoCor="alternarModoCor" />
     </div>
     <div class="column is-three-quarters conteudo">
+      <CNotificacoes />
       <router-view></router-view>
     </div>
   </main>
@@ -12,12 +13,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import BarraLateral from './components/BarraLateral.vue';
+import CNotificacoes from './components/CNotificacoes.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
-    BarraLateral
-  },
+    BarraLateral,
+    CNotificacoes
+},
   data() {
     return {
       modoEscuro: false

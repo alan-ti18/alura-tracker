@@ -1,7 +1,8 @@
 <template>
   <BoxCard>
     <div class="columns">
-      <div class="column is-7 desc">{{ descricaoFormatada || 'Tarefa sem Descrição' }}</div>
+      <div class="column is-6 desc">{{ descricaoFormatada || 'Tarefa sem Descrição' }}</div>
+      <div class="column is-4 desc">[{{tarefa.projeto.nome}}]</div>
       <div class="column crono-wrapper">
         <CronometroTracker :tempoEmSegundos="tarefa.duracaoEmSegundos">
         <ClockTimeEightOutlineIcon :size="16" style="margin-right: 8px;"/>
@@ -17,6 +18,7 @@ import CronometroTracker from "./CronometroTracker.vue";
 import ITarefa from '@/interfaces/ITarefa'
 import BoxCard from "./BoxCard.vue";
 import ClockTimeEightOutlineIcon from 'vue-material-design-icons/ClockTimeEightOutline.vue';
+import { useStore } from "vuex";
 
 export default defineComponent({
   name: "ListaTarefas",
@@ -24,6 +26,12 @@ export default defineComponent({
     CronometroTracker,
     BoxCard,
     ClockTimeEightOutlineIcon
+  },
+  setup() {
+    const store = useStore()
+    return {
+      store
+    }
   },
   props: {
     tarefa: {

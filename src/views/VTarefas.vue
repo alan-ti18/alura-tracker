@@ -12,7 +12,8 @@
 import { defineComponent } from 'vue';
 import FormularioTracker from '@/components/FormularioTracker.vue';
 import ListaTarefas from '@/components/ListaTarefas.vue';
-import ITarefa from '@/interfaces/ITarefa'
+// import { useStore } from 'vuex';
+import ITarefa from '@/interfaces/ITarefa';
 
 export default defineComponent({
   name: 'App',
@@ -22,11 +23,18 @@ export default defineComponent({
   },
   data() {
     return {
-      tarefas: [] as ITarefa[],
+      tarefas: [] as ITarefa[]
     }
   },
+
   methods: {
     salvarTarefa(tarefa: ITarefa) {
+      tarefa.id = new Date()
+        .toISOString()
+        .substring(0,19)
+        .replaceAll('-','')
+        .replaceAll(':','')
+        .replace('T','');
       this.tarefas.push(tarefa);
     }
   }
