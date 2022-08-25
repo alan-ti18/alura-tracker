@@ -1,19 +1,22 @@
 import { INotificacao } from "@/interfaces/INotificacao";
 import IProjeto from "@/interfaces/IProjeto";
-// import ITarefa from "@/interfaces/ITarefa";
+import ITarefa from "@/interfaces/ITarefa";
 import { InjectionKey } from "vue";
 import { createStore, Store, useStore as vuexUseStore } from "vuex";
 import {
   ALTERAR_PROJETO,
+  ALTERAR_TAREFA,
   CADASTRAR_PROJETO,
+  CADASTRAR_TAREFA,
   OBTER_PROJETOS,
+  OBTER_TAREFAS,
   REMOVER_PROJETO,
 } from "./tipo-acoes";
 import http from "@/http/index";
 
 interface Estado {
   projetos: IProjeto[];
-  // tarefas: ITarefa[];
+  tarefas: ITarefa[];
   notificacoes: INotificacao[];
 }
 
@@ -22,7 +25,7 @@ export const key: InjectionKey<Store<Estado>> = Symbol();
 export const store = createStore<Estado>({
   state: {
     projetos: [],
-    // tarefas: [],
+    tarefas: [],
     notificacoes: [],
   },
   mutations: {
@@ -49,23 +52,20 @@ export const store = createStore<Estado>({
     DEFINIR_PROJETOS(state, projetos: IProjeto[]) {
       state.projetos = projetos;
     },
-    // ADICIONA_TAREFA(state, tarefa: ITarefa) {
-    //   tarefa.id = new Date()
-    //     .toISOString()
-    //     .substring(0, 19)
-    //     .replaceAll("-", "")
-    //     .replaceAll(":", "")
-    //     .replaceAll("T", "");
-    //   state.tarefas.push(tarefa);
-    // },
-    // ALTERA_TAREFA(state, tarefa: ITarefa) {
-    //   const index = state.tarefas.findIndex((tar) => tar.id == tarefa.id);
-    //   state.tarefas[index] = tarefa;
-    // },
-    // EXCLUI_TAREFA(state, id: string) {
-    //   const index = state.tarefas.findIndex((tar) => tar.id == id);
-    //   state.tarefas.splice(index, 1);
-    // },
+    ADICIONA_TAREFA(state, tarefa: ITarefa) {
+      state.tarefas.push(tarefa);
+    },
+    ALTERA_TAREFA(state, tarefa: ITarefa) {
+      const index = state.tarefas.findIndex((tar) => tar.id == tarefa.id);
+      state.tarefas[index] = tarefa;
+    },
+    EXCLUI_TAREFA(state, id: number) {
+      const index = state.tarefas.findIndex((tar) => tar.id == id);
+      state.tarefas.splice(index, 1);
+    },
+    DEFINIR_TAREFAS(state, tarefas: ITarefa[]) {
+      state.tarefas = tarefas;
+    },
     NOTIFICAR(state, novaNotificacao: INotificacao) {
       novaNotificacao.id = new Date().getTime();
       state.notificacoes.push(novaNotificacao);
@@ -94,6 +94,21 @@ export const store = createStore<Estado>({
       return http
         .delete(`projetos/${id}`)
         .then(() => this.commit("EXCLUI_PROJETO", id));
+    },
+    [OBTER_TAREFAS]({ commit }) {
+      http.get("tarefas").then((res) => {
+        commit("DEFINIR_TAREFAS", res.data);
+      });
+    },
+    [CADASTRAR_TAREFA](contexto, tarefa: ITarefa) {
+      return http.post("tarefas", tarefa).then((res) => {
+        contexto.commit("ADICIONA_TAREFA", res.data);
+      });
+    },
+    [ALTERAR_TAREFA](contexto, tarefa: ITarefa) {
+      return http.put(`tarefas/${tarefa.id}`, tarefa).then((res) => {
+        store.commit("ALTERA_TAREFA", res.data);
+      });
     },
   },
 });
